@@ -7,6 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.wld.mycamerax.R;
+import com.wld.mycamerax.activity.CameraActivity;
 
 import java.io.File;
 
@@ -52,7 +53,6 @@ public class CameraParam implements Parcelable {
     private String focusSuccessTips;//聚焦成功提示
     private String focusFailTips;//聚焦失败提示
     private Activity mActivity;//
-    private Class targetActivity;//
 
     private boolean showFocusTips;//是否显示聚焦成功的提示
 
@@ -92,20 +92,16 @@ public class CameraParam implements Parcelable {
         focusSuccessTips = mBuilder.focusSuccessTips;
         focusFailTips = mBuilder.focusFailTips;
         mActivity = mBuilder.mActivity;
-        targetActivity = mBuilder.targetActivity;
         showFocusTips = mBuilder.showFocusTips;
         requestCode = mBuilder.requestCode;
 
         if (mActivity == null) {
             throw new NullPointerException("Activity param is null");
         }
-        if (targetActivity == null) {
-            throw new NullPointerException("target Activity is null");
-        }
     }
 
     private CameraParam startActivity(int requestCode) {
-        Intent intent = new Intent(mActivity, targetActivity);
+        Intent intent = new Intent(mActivity, CameraActivity.class);
         intent.putExtra(CameraConstant.CAMERA_PARAM_KEY, this);
         mActivity.startActivityForResult(intent, requestCode);
         return this;
@@ -387,7 +383,6 @@ public class CameraParam implements Parcelable {
         private String focusSuccessTips;//聚焦成功提示
         private String focusFailTips;//聚焦失败提示
         private Activity mActivity;//
-        private Class targetActivity;//
         private boolean showFocusTips = true;
         private int requestCode = CameraConstant.REQUEST_CODE;
 
@@ -543,11 +538,6 @@ public class CameraParam implements Parcelable {
 
         public Builder setActivity(Activity mActivity) {
             this.mActivity = mActivity;
-            return this;
-        }
-
-        public Builder setTargetActivity(Class targetActivity) {
-            this.targetActivity = targetActivity;
             return this;
         }
 

@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
                         if (allGranted) {
                             CameraParam mCameraParam = new CameraParam.Builder()
                                     .setActivity(MainActivity.this)
-                                    .setTargetActivity(CameraActivity.class)
                                     .build();
                         } else {
                             Toast.makeText(getApplicationContext(), "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show();
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 //            CameraParam mCameraParam =
 //                    new CameraParam.Builder()
 //                            .setActivity(this)//！！！参数必须要有
-//                            .setTargetActivity(CameraActivity.class)//！！！参数必须要有
 //                            .setFront(false)//是否是前置摄像头，true是前置摄像头，false是后置摄像头
 //                            .setShowMask(true)//是否显示裁剪区，如果显示，图片会进行裁剪
 //                            .setShowSwitch(true)//是否显示摄像头切换按钮，如果显示，可以点击切换前后摄像头
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 //                            .setRequestCode(CameraConstant.REQUEST_CODE)//请求码
 //                            .build();
 
-            //前两个参数是必须要有的，后面的参数不是必须的，如果想获取默认参数可以像下面这样
+            //第一个参数是必须要有的，后面的参数不是必须的，如果想获取默认参数可以像下面这样
 //            Log.d("wld______", mCameraParam.getPicturePath());
         });
     }
