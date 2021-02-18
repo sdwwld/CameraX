@@ -22,7 +22,7 @@
 
 然后在使用的module的buid.gradle中添加
 ```java
-    implementation 'com.github.sdwwld:CameraX:1.0.2'
+    implementation 'com.github.sdwwld:CameraX:1.1.0'
  ```
 
 
