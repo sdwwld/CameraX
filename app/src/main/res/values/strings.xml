@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CameraX</string>
+    <string name="focus_success">Focus Success</string>
+    <string name="focus_fail">Focus Fail</string>
+</resources>
