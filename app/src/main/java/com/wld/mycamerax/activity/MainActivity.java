@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
+//        startActivity(new Intent(this, BitmapSizeActivity.class));
+
         tv_camera = findViewById(R.id.tv_camera);
         img_picture = findViewById(R.id.img_picture);
 

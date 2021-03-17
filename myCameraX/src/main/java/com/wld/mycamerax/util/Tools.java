@@ -257,7 +257,7 @@ public final class Tools {
 
     public static int[] getViewLocal(View view) {
         int[] outLocation = new int[2];
-        view.getLocationOnScreen(outLocation);
+        view.getLocationInWindow(outLocation);
         return outLocation;
     }
 
