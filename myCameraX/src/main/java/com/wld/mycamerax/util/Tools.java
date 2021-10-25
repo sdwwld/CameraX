@@ -77,9 +77,24 @@ public final class Tools {
         return AspectRatio.RATIO_16_9;
     }
 
-    public static String getPicturePath() {
-//        return new File(mContext.getExternalFilesDir("images"), ".jpg");
-        String cameraPath = Environment.getExternalStorageDirectory().getPath() + File.separator + "DCIM" + File.separator + "Camera";
+    public static boolean checkSD() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
+    public static String getPicturePath(Context context) {
+//        String cameraPath = Environment.getExternalStorageDirectory().getPath() + File.separator + "DCIM" + File.separator + "Camera";
+
+        String cameraPath = null;
+        if (checkSD()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                cameraPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + File.separator + "DCIM" + File.separator + "Camera";
+            } else {
+                cameraPath = Environment.getExternalStorageDirectory().getPath() + File.separator + "DCIM" + File.separator + "Camera";
+            }
+        } else {
+            cameraPath = context.getFilesDir() + File.separator;
+        }
+
         File cameraFolder = new File(cameraPath);
         if (!cameraFolder.exists()) {
             cameraFolder.mkdirs();

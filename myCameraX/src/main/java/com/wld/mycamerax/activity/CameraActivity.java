@@ -48,6 +48,11 @@ import com.wld.mycamerax.util.Tools;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+
 public class CameraActivity extends AppCompatActivity {
 
     private PreviewView previewView;
@@ -68,6 +73,7 @@ public class CameraActivity extends AppCompatActivity {
     private ProcessCameraProvider cameraProvider;
     private CameraParam mCameraParam;
     private boolean front;
+    private Disposable mTimerDisposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,7 +87,7 @@ public class CameraActivity extends AppCompatActivity {
             throw new IllegalArgumentException("CameraParam is null");
         }
         if (!Tools.checkPermission(this)) {
-            throw new NoPermissionException("需要有拍照权限和存储权限");
+            throw new NoPermissionException("Need to have permission to take pictures and storage");
         }
         front = mCameraParam.isFront();
         initView();
@@ -234,6 +240,7 @@ public class CameraActivity extends AppCompatActivity {
             rl_start.setVisibility(View.VISIBLE);
             rl_result_picture.setVisibility(View.GONE);
             ll_picture_parent.setVisibility(View.GONE);
+            autoFocusTimer();
         });
         //拍照成功然后点保存
         img_picture_save.setOnClickListener(v -> {
@@ -300,15 +307,34 @@ public class CameraActivity extends AppCompatActivity {
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
         mCameraControl = camera.getCameraControl();
 //        mCameraInfo = camera.getCameraInfo();
+//        autoFocus(outLocation[0] + (view_mask.getMeasuredWidth()) / 2, outLocation[1] + (view_mask.getMeasuredHeight()) / 2, true);
+        autoFocusTimer();
+    }
 
+    private void autoFocusTimer() {
         int[] outLocation = Tools.getViewLocal(view_mask);
-        autoFocus(outLocation[0] + (view_mask.getMeasuredWidth()) / 2, outLocation[1] + (view_mask.getMeasuredHeight()) / 2, true);
+        autoFocusCancel();
+        mTimerDisposable = Observable.interval(0, 3, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        autoFocus(outLocation[0] + (view_mask.getMeasuredWidth()) / 2, outLocation[1] + (view_mask.getMeasuredHeight()) / 2, true);
+                    }
+                });
+    }
+
+    private void autoFocusCancel() {
+        if (mTimerDisposable != null)
+            mTimerDisposable.dispose();
     }
 
     private void takePhoto(String photoFile) {
         // 保证相机可用
         if (imageCapture == null)
             return;
+
+        autoFocusCancel();
 
         ImageCapture.OutputFileOptions outputOptions = new ImageCapture.OutputFileOptions.Builder(new File(photoFile)).build();
 
@@ -391,6 +417,7 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        autoFocusCancel();
         cameraProvider.unbindAll();
 //        if (cameraExecutor != null)
 //            cameraExecutor.shutdown();

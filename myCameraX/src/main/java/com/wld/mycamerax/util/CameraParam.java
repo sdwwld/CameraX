@@ -345,7 +345,8 @@ public class CameraParam implements Parcelable {
 
     public static class Builder {
         private boolean front = false;
-        private String picturePath = Tools.getPicturePath();
+        private Activity mActivity;//
+        private String picturePath = Tools.getPicturePath(mActivity);
         private boolean showMask = true;
         private boolean showSwitch = false;
         private String backText = null;
@@ -382,7 +383,6 @@ public class CameraParam implements Parcelable {
 
         private String focusSuccessTips;//聚焦成功提示
         private String focusFailTips;//聚焦失败提示
-        private Activity mActivity;//
         private boolean showFocusTips = true;
         private int requestCode = CameraConstant.REQUEST_CODE;
 

@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     .request((boolean allGranted, List<String> grantedList, List<String> deniedList) -> {
                         if (allGranted) {
                             CameraParam mCameraParam = new CameraParam.Builder()
+                                    .setShowFocusTips(false)
                                     .setActivity(MainActivity.this)
                                     .build();
                         } else {
